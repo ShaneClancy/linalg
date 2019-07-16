@@ -33,7 +33,6 @@ int main(int argc, char ** agrv){
     printf("\t+\n");
     m6.print();
     printf("\t=\n");
-    Matrix m7(3,3);
-    m7 = m6.add(m5);
+    Matrix m7 = m6.add(m5);
     m7.print();
 }

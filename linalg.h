@@ -115,7 +115,6 @@ Matrix Matrix::add(Matrix other){
     for (int r = 0; r < newMatrix.getRows(); r++){
         for (int c = 0; c < newMatrix.getCols(); c++){
             float val = this->getEntry(r,c) + other.getEntry(r,c);
-            printf("Adding %.3f to %.3f = %.3f\n", this->getEntry(r,c), other.getEntry(r,c), val);
             newMatrix.setEntry(r,c, val);
         }
     }
@@ -123,10 +122,13 @@ Matrix Matrix::add(Matrix other){
 }
 
 Matrix::~Matrix(){
-    printf("freeing matrix\n");
+    if (this->matrix == NULL){
+        return;
+    }
     for (int r = 0; r < this->rows; r++){
         delete [] this->matrix[r];
+        this->matrix[r] = NULL;
     }
     delete [] this->matrix;
-    printf("free complete\n");
+    this->matrix = NULL;
 }
