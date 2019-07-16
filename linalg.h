@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 
 class Matrix {
     private:
@@ -15,7 +16,10 @@ class Matrix {
         float getEntry(const int &, const int &) const;
         Matrix transpose();
         Matrix add(Matrix other);
+        Matrix subtract(Matrix other);
+        Matrix multiply(Matrix other);
         void print() const;
+        bool operator==(const Matrix & other);
         ~Matrix();
 };
 
@@ -88,7 +92,7 @@ void Matrix::setEntry(int i, int j, float val){
 
 float Matrix::getEntry(const int & i, const int & j) const {
     if (i < 0 || i >= rows || j < 0 || j >= cols){
-        printf("Invalid Entry");
+        printf("Invalid Entry\n");
         return 0;
     }
     return this->matrix[i][j];
@@ -119,6 +123,53 @@ Matrix Matrix::add(Matrix other){
         }
     }
     return newMatrix;
+}
+
+Matrix Matrix::subtract(Matrix other){
+    if (this->getRows() != other.getRows() || this->getCols() != other.getCols()){
+        printf("Matrices dont have same dimensions\n");
+        return other;
+    }
+    Matrix newMatrix(other.getRows(), other.getCols());
+    for (int r = 0; r < newMatrix.getRows(); r++){
+        for (int c = 0; c < newMatrix.getCols(); c++){
+            float val = this->getEntry(r,c) - other.getEntry(r,c);
+            newMatrix.setEntry(r,c, val);
+        }
+    }
+    return newMatrix;
+}
+
+Matrix Matrix::multiply(Matrix other){
+    if (this->getRows() != other.getCols()){
+        printf("Invalid multiplication dimensions\n");
+    }
+    Matrix newMatrix(this->getCols(), other.getRows());
+    for (int riter = 0; riter < other.getRows(); riter++){
+        for (int r = 0; r < this->getRows(); r++){
+            float val = 0;
+            for (int c = 0; c < this->getCols(); c++){
+                val += this->getEntry(riter,c) * other.getEntry(c,r);
+            }
+            newMatrix.setEntry(riter, r, val);
+        }
+    }
+    return newMatrix;
+
+}
+
+bool Matrix::operator==(const Matrix & other){
+    if (this->getRows() != other.getRows() || this->getCols() != other.getCols()){
+        return false;
+    }
+    for (int r = 0; r <  this->getRows(); r++){
+        for (int c = 0; c < this->getCols(); c++){
+            if (this->getEntry(r,c) != other.getEntry(r,c)){
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 Matrix::~Matrix(){
