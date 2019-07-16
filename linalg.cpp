@@ -1,75 +1,108 @@
 #include "linalg.h"
 
-int main(int argc, char ** agrv){
-
+void default_constructor_test(){
     printf("\nDefault Constructor Test\n");
     Matrix m1;
     m1.print();
+}
 
+void dim_constructor_test(){
     printf("\nr x c Matrix Constructor Test\n");
-    Matrix m2(3, 4);
-    m2.print();
+    Matrix m1(3, 4);
+    m1.print();
+}
 
+void copy_constructor_test(){
     printf("\nCopy Constructor Test\n");
-    Matrix m3(m2);
-    m3.print();
+    Matrix m1(3,3);
+    Matrix m2(m1);
+    m1.print();
+    m2.print();
+}
 
+void transpose_test(){
     printf("\nTranspose Test\n");
-    Matrix m4 = m2.transpose();
-    m4.print();
+    Matrix m1(1,5);
+    Matrix m2 = m1.transpose();
+    m1.print();
+    m2.print();
+}
 
+void set_entry_test(){
     printf("\nSet Entry Test\n");
-    Matrix m5(3,3);
-    for (int r = 0; r < m5.getRows(); r++){
-        for (int c = 0; c < m5.getCols(); c++){
+    Matrix m1(3,3);
+    for (int r = 0; r < m1.getRows(); r++){
+        for (int c = 0; c < m1.getCols(); c++){
             float val = r+c;
-            m5.setEntry(r, c, val);
+            m1.setEntry(r, c, val);
         }
     }
-    m5.print();
+    m1.print();
+}
 
+void addition_test(){
     printf("\nAddition Test\n");
-    Matrix m6(m5);
-    m5.print();
+    Matrix m1(3,3);
+    for (int r = 0; r < m1.getRows(); r++){
+        for (int c = 0; c < m1.getCols(); c++){
+            float val = r+c;
+            m1.setEntry(r, c, val);
+        }
+    }
+    m1.print();
     printf("\t+\n");
-    m6.print();
+    m1.print();
     printf("\t=\n");
-    Matrix m7 = m6.add(m5);
-    m7.print();
+    Matrix m2 = m1.add(m1);
+    m2.print();
+}
 
+void subtraction_test(){
     printf("\nSubtraction Test\n");
-    m5.print();
+    Matrix m1(3,3);
+    for (int r = 0; r < m1.getRows(); r++){
+        for (int c = 0; c < m1.getCols(); c++){
+            float val = r+c;
+            m1.setEntry(r, c, val);
+        }
+    }
+    m1.print();
     printf("\t-\n");
-    m6.print();
+    m1.print();
     printf("\t=\n");
-    Matrix m8 = m6.subtract(m5);
-    m8.print();
+    Matrix m2 = m1.subtract(m1);
+    m2.print();
+}
 
+void multiplication_test(){
     printf("\nMultiplication Test\n");
-    Matrix m9(3,3);
-    Matrix m10(3,3);
-    m9.setEntry(0,0, 1);
-    m9.setEntry(0,1, 2);
-    m9.setEntry(0,2, 3);
-    m9.setEntry(1,0, 4);
-    m9.setEntry(1,1, 5);
-    m9.setEntry(1,2, 6);
-    m9.setEntry(2,0, 7);
-    m9.setEntry(2,1, 8);
-    m9.setEntry(2,2, 9);
-    m10.setEntry(0,0, 1);
-    m10.setEntry(0,1, 2);
-    m10.setEntry(0,2, 3);
-    m10.setEntry(1,0, 4);
-    m10.setEntry(1,1, 5);
-    m10.setEntry(1,2, 6);
-    m10.setEntry(2,0, 7);
-    m10.setEntry(2,1, 8);
-    m10.setEntry(2,2, 9);
-    m9.print();
+    Matrix m1(3,3);
+    m1.setEntry(0,0, 1);
+    m1.setEntry(0,1, 2);
+    m1.setEntry(0,2, 3);
+    m1.setEntry(1,0, 4);
+    m1.setEntry(1,1, 5);
+    m1.setEntry(1,2, 6);
+    m1.setEntry(2,0, 7);
+    m1.setEntry(2,1, 8);
+    m1.setEntry(2,2, 9);
+    m1.print();
     printf("\t*\n");
-    m10.print();
+    m1.print();
     printf("\t=\n");
-    Matrix m11 = m9.multiply(m10);
-    m11.print();
+    Matrix m2 = m1.multiply(m1);
+    m2.print();
+}
+
+int main(int argc, char ** agrv){
+
+    default_constructor_test();
+    dim_constructor_test();
+    copy_constructor_test();
+    transpose_test();
+    set_entry_test();
+    addition_test();
+    subtraction_test();
+    multiplication_test();
+
 }
