@@ -7,20 +7,21 @@ class Matrix {
         int rows;
         int cols;
     public:
-        Matrix();
+        Matrix(void);
         Matrix(const int &, const int &);
         Matrix(const Matrix &);
-        int getRows() const;
-        int getCols() const;
+        int getRows(void) const;
+        int getCols(void) const;
         void setEntry(int, int, float);
         float getEntry(const int &, const int &) const;
-        Matrix transpose();
+        int * dims(void);
+        Matrix transpose(void);
         Matrix add(Matrix other);
         Matrix subtract(Matrix other);
         Matrix multiply(Matrix other);
-        void print() const;
+        void print(void) const;
         bool operator==(const Matrix & other);
-        ~Matrix();
+        ~Matrix(void);
 };
 
 Matrix::Matrix(const int &rows,const int &cols){
@@ -51,7 +52,7 @@ Matrix::Matrix(const Matrix &other){
     }
 }
 
-Matrix::Matrix(){
+Matrix::Matrix(void){
     this->rows = 1;
     this->cols = 1;
     this->matrix = new float *[rows];
@@ -61,7 +62,7 @@ Matrix::Matrix(){
     this->matrix[0][0] = 0;
 }
 
-void Matrix::print() const {
+void Matrix::print(void) const {
     printf("[ ");
     for (int r = 0; r < this->rows; r++){
         for (int c = 0; c < this->cols; c++){
@@ -74,11 +75,11 @@ void Matrix::print() const {
     printf("]\n");
 }
 
-int Matrix::getRows() const {
+int Matrix::getRows(void) const {
     return this->rows;
 }
 
-int Matrix::getCols() const {
+int Matrix::getCols(void) const {
     return this->cols;
 }
 
@@ -98,7 +99,14 @@ float Matrix::getEntry(const int & i, const int & j) const {
     return this->matrix[i][j];
 }
 
-Matrix Matrix::transpose(){
+int * Matrix::dims(void){
+    int * arr = new int[2];
+    arr[0] = this->getRows();
+    arr[1] = this->getCols();
+    return arr;
+}
+
+Matrix Matrix::transpose(void){
     const int & newRows = this->cols;
     const int & newCols = this->rows;
     Matrix newMatrix(newRows, newCols);
@@ -172,7 +180,7 @@ bool Matrix::operator==(const Matrix & other){
     return true;
 }
 
-Matrix::~Matrix(){
+Matrix::~Matrix(void){
     if (this->matrix == NULL){
         return;
     }

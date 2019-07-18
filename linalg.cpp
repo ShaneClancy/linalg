@@ -1,18 +1,18 @@
 #include "linalg.h"
 
-void default_constructor_test(){
+void default_constructor_test(void){
     printf("\nDefault Constructor Test\n");
     Matrix m1;
     m1.print();
 }
 
-void dim_constructor_test(){
+void dim_constructor_test(void){
     printf("\nr x c Matrix Constructor Test\n");
     Matrix m1(3, 4);
     m1.print();
 }
 
-void copy_constructor_test(){
+void copy_constructor_test(void){
     printf("\nCopy Constructor Test\n");
     Matrix m1(3,3);
     Matrix m2(m1);
@@ -20,7 +20,7 @@ void copy_constructor_test(){
     m2.print();
 }
 
-void transpose_test(){
+void transpose_test(void){
     printf("\nTranspose Test\n");
     Matrix m1(1,5);
     Matrix m2 = m1.transpose();
@@ -28,7 +28,7 @@ void transpose_test(){
     m2.print();
 }
 
-void set_entry_test(){
+void set_entry_test(void){
     printf("\nSet Entry Test\n");
     Matrix m1(3,3);
     for (int r = 0; r < m1.getRows(); r++){
@@ -40,7 +40,7 @@ void set_entry_test(){
     m1.print();
 }
 
-void addition_test(){
+void addition_test(void){
     printf("\nAddition Test\n");
     Matrix m1(3,3);
     for (int r = 0; r < m1.getRows(); r++){
@@ -57,7 +57,7 @@ void addition_test(){
     m2.print();
 }
 
-void subtraction_test(){
+void subtraction_test(void){
     printf("\nSubtraction Test\n");
     Matrix m1(3,3);
     for (int r = 0; r < m1.getRows(); r++){
@@ -74,7 +74,7 @@ void subtraction_test(){
     m2.print();
 }
 
-void multiplication_test(){
+void multiplication_test(void){
     printf("\nMultiplication Test\n");
     Matrix m1(3,3);
     m1.setEntry(0,0, 1);
@@ -94,6 +94,19 @@ void multiplication_test(){
     m2.print();
 }
 
+void dims_test(void){
+    Matrix m1 = Matrix(3,3);
+    int * dim = m1.dims();
+    printf("\nDimensions Test of 3x3\n");
+    printf("(%d, %d)\n", dim[0], dim[1]);
+    delete [] dim;
+    Matrix m2 = Matrix(1,5);
+    dim = m2.dims();
+    printf("\nDimensions Test of 1x5\n");
+    printf("(%d, %d)\n", dim[0], dim[1]);
+    delete [] dim;
+}
+
 int main(int argc, char ** agrv){
 
     default_constructor_test();
@@ -104,5 +117,6 @@ int main(int argc, char ** agrv){
     addition_test();
     subtraction_test();
     multiplication_test();
+    dims_test();
 
 }
