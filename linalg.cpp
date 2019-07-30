@@ -107,6 +107,24 @@ void dims_test(void){
     delete [] dim;
 }
 
+void ref_test(void){
+    Matrix m1 = Matrix(3,3);
+    m1.setEntry(0,0, 1);
+    m1.setEntry(0,1, 2);
+    m1.setEntry(0,2, 3);
+    m1.setEntry(1,0, 4);
+    m1.setEntry(1,1, 5);
+    m1.setEntry(1,2, 6);
+    m1.setEntry(2,0, 7);
+    m1.setEntry(2,1, 8);
+    m1.setEntry(2,2, 9);
+    m1.print();
+    Matrix m2 = m1.ref();
+    printf("ref version");
+    m2.print();
+
+}
+
 int main(int argc, char ** agrv){
 
     default_constructor_test();
@@ -118,5 +136,5 @@ int main(int argc, char ** agrv){
     subtraction_test();
     multiplication_test();
     dims_test();
-
+    ref_test();
 }

@@ -19,6 +19,7 @@ class Matrix {
         Matrix add(Matrix other);
         Matrix subtract(Matrix other);
         Matrix multiply(Matrix other);
+        Matrix ref(void);
         void print(void) const;
         bool operator==(const Matrix & other);
         ~Matrix(void);
@@ -164,6 +165,46 @@ Matrix Matrix::multiply(Matrix other){
     }
     return newMatrix;
 
+}
+
+Matrix Matrix::ref(void){
+    int pivotpos = 0;
+    int i, j = 0;
+
+    while (i < this->getRows()){
+        if (this->getEntry(i, j) == 0){
+            for (int x = i+1; x < this->getRows(); x++){
+                if (this->getEntry(x, j) != 0){
+                    float * temp = new float[this->getCols()];
+                    for (int y = 0; y < this->getCols(); y++){
+                        temp[y] = this->getEntry(x, y);
+                        this->setEntry(x,y, this->getEntry(i, y));
+                        this->setEntry(i, y, temp[y]);
+                    }
+                    delete [] temp;
+                    break;
+                }
+                if (x == this->getRows() - 1){
+                    i++;
+                    j++;
+                }
+            }
+        }
+        else {
+            float div = 1/this->getEntry(i ,j);
+            for (int y = j; y < this->getCols(); y++){
+                this->setEntry(i,y, this->getEntry(i , y)/div);
+            }
+            for (int x = i+1; x < this->getRows(); x++){
+                float div = 0 - this->getEntry(x, j);
+                for (int y = j; y < this->getCols(); y++){
+                    this->setEntry(x, y, this->getEntry(x,y) + div*this->getEntry(i,j));
+                }
+            }
+            i++;
+            j++;
+        }
+    }
 }
 
 bool Matrix::operator==(const Matrix & other){
