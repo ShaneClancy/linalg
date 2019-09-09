@@ -1,113 +1,99 @@
 #include <stdio.h>
-#include <time.h>
+#include <vector>
+#include <string>
 
 class Matrix {
     private:
-        float ** matrix;
         int rows;
         int cols;
     public:
+        std::vector<std::vector<float>> matrix;
         Matrix(void);
         Matrix(const int &, const int &);
         Matrix(const Matrix &);
-        int getRows(void) const;
-        int getCols(void) const;
-        void setEntry(int, int, float);
-        float getEntry(const int &, const int &) const;
-        int * dims(void);
+        int getRows(void);
+        int getCols(void);
+        void setEntry(const int &, const int &, float);
+        float getEntry(const int &, const int &);
+        std::string dims(void);
+        void print(void);
         Matrix transpose(void);
-        Matrix add(Matrix other);
-        Matrix subtract(Matrix other);
-        Matrix multiply(Matrix other);
-        Matrix ref(void);
-        void print(void) const;
-        bool operator==(const Matrix & other);
-        ~Matrix(void);
+        Matrix add(const Matrix &);
+        Matrix subtract(const Matrix &);
+        Matrix multiply(const Matrix &);
+        bool operator==(const Matrix &);
 };
 
-Matrix::Matrix(const int &rows,const int &cols){
-    this->rows = rows;
-    this->cols = cols;
-    this->matrix = new float *[rows];
-    for (int r = 0; r < rows; r++){
-        this->matrix[r] = new float[cols];
-    }
-    for (int r = 0; r < rows; r++){
-        for (int c = 0; c < cols; c++){
-            this->matrix[r][c] = 0;
-        }
+Matrix::Matrix(void) {
+    this->rows = 0;
+    this->cols = 0;
+}
+
+Matrix::Matrix(const int &x, const int &y) {
+    this->rows = x;
+    this->cols = y;
+    std::vector<float> rowSize = std::vector<float>(rows);
+    for (int i = 0; i < y; i++){
+        this->matrix.push_back(rowSize);
     }
 }
 
-Matrix::Matrix(const Matrix &other){
+Matrix::Matrix(const Matrix &other) {
     this->rows = other.rows;
     this->cols = other.cols;
-    this->matrix = new float *[rows];
-    for (int r = 0; r < rows; r++){
-        this->matrix[r] = new float[cols];
-    }
-    for (int r = 0; r < this->rows; r++){
-        for (int c = 0; c < this->cols; c++){
-            this->matrix[r][c] = other.getEntry(r,c);
-        }
-    }
 }
 
-Matrix::Matrix(void){
-    this->rows = 1;
-    this->cols = 1;
-    this->matrix = new float *[rows];
-    for (int r = 0; r < rows; r++){
-        this->matrix[r] = new float[cols];
-    }
-    this->matrix[0][0] = 0;
-}
-
-void Matrix::print(void) const {
-    printf("[ ");
-    for (int r = 0; r < this->rows; r++){
-        for (int c = 0; c < this->cols; c++){
-            printf("%.3f ", this->matrix[r][c]);
-        }
-        if (r != this->rows - 1){ 
-            printf("\n  ");
-        }
-    }
-    printf("]\n");
-}
-
-int Matrix::getRows(void) const {
+int Matrix::getRows() {
     return this->rows;
 }
 
-int Matrix::getCols(void) const {
+int Matrix::getCols() {
     return this->cols;
 }
 
-void Matrix::setEntry(int i, int j, float val){
-    if (i < 0 || i >= rows || j < 0 || j >= cols){
-        printf("Invalid Entry");
-        return;
+void Matrix::setEntry(const int &row, const int &col, float entry) {
+    if (row <= this->getRows() && col <= this->getCols()) {
+        this->matrix[row][col] = entry;
     }
-    this->matrix[i][j] = val;
-}
-
-float Matrix::getEntry(const int & i, const int & j) const {
-    if (i < 0 || i >= rows || j < 0 || j >= cols){
-        printf("Invalid Entry\n");
-        return 0;
+    else {
+        printf("Not a valid row, col in this matrix\n");
     }
-    return this->matrix[i][j];
 }
 
-int * Matrix::dims(void){
-    int * arr = new int[2];
-    arr[0] = this->getRows();
-    arr[1] = this->getCols();
-    return arr;
+float Matrix::getEntry(const int &row, const int &col) {
+    if (row <= this->getRows() && col <= this->getCols()) {
+        return this->matrix[row][col];
+    }
+    else {
+        printf("Out of bounds of this matrix\n");
+        return 0.0;
+    }
 }
 
-Matrix Matrix::transpose(void){
+std::string Matrix::dims() {
+    std::string ret = "";
+    ret += "(";
+    ret += std::to_string(getRows());
+    ret += ",";
+    ret += std::to_string(getCols());
+    ret += ")";
+    return ret;
+}
+
+void Matrix::print(void) {
+    printf("[");
+    for (int x = 0; x < this->getRows(); x++) {
+        for (int y = 0; y < this->getCols(); y++) {
+            printf("%5.2f ", this->getEntry(x,y));
+        }
+        if (x == this->getRows()) { 
+            printf("]");
+        }
+        printf("\n");
+    }
+}
+
+Matrix Matrix::transpose() {
     const int & newRows = this->cols;
     const int & newCols = this->rows;
     Matrix newMatrix(newRows, newCols);
@@ -119,101 +105,60 @@ Matrix Matrix::transpose(void){
     return newMatrix;
 }
 
-Matrix Matrix::add(Matrix other){
-    if (this->getRows() != other.getRows() || this->getCols() != other.getCols()){
-        printf("Matrices dont have same dimensions");
-        return other;
-    }
-    Matrix newMatrix(other.getRows(), other.getCols());
-    for (int r = 0; r < newMatrix.getRows(); r++){
-        for (int c = 0; c < newMatrix.getCols(); c++){
-            float val = this->getEntry(r,c) + other.getEntry(r,c);
-            newMatrix.setEntry(r,c, val);
-        }
-    }
-    return newMatrix;
-}
-
-Matrix Matrix::subtract(Matrix other){
-    if (this->getRows() != other.getRows() || this->getCols() != other.getCols()){
+Matrix Matrix::add(const Matrix &other) {
+    if (this->getRows() != other.rows || this->getCols() != other.cols) {
         printf("Matrices dont have same dimensions\n");
-        return other;
+        return *this;
     }
-    Matrix newMatrix(other.getRows(), other.getCols());
-    for (int r = 0; r < newMatrix.getRows(); r++){
-        for (int c = 0; c < newMatrix.getCols(); c++){
-            float val = this->getEntry(r,c) - other.getEntry(r,c);
+    Matrix newMatrix(other.rows, other.cols);
+    for (int r = 0; r < newMatrix.getRows(); r++) {
+        for (int c = 0; c < newMatrix.getCols(); c++) {
+            float val = this->getEntry(r,c) + other.matrix[r][c];
             newMatrix.setEntry(r,c, val);
         }
     }
     return newMatrix;
 }
 
-Matrix Matrix::multiply(Matrix other){
-    if (this->getRows() != other.getCols()){
+Matrix Matrix::subtract(const Matrix &other) {
+    if (this->getRows() != other.rows || this->getCols() != other.cols) {
+        printf("Matrices dont have the same dimensions\n");
+        return *this;
+    }
+    Matrix newMatrix(other.rows, other.cols);
+    for (int r = 0; r < newMatrix.getRows(); r++) {
+        for (int c = 0; c < newMatrix.getCols(); c++) {
+            float val = this->getEntry(r,c) - other.matrix[r][c];
+            newMatrix.setEntry(r,c, val);
+        }
+    }
+    return newMatrix;
+}
+
+Matrix Matrix::multiply(const Matrix &other) { 
+    if (this->getRows() != other.cols) {
         printf("Invalid multiplication dimensions\n");
     }
-    Matrix newMatrix(this->getCols(), other.getRows());
-    for (int riter = 0; riter < other.getRows(); riter++){
+    Matrix newMatrix(other.cols, other.rows);
+    for (int riter = 0; riter < other.rows; riter++){
         for (int r = 0; r < this->getRows(); r++){
             float val = 0;
             for (int c = 0; c < this->getCols(); c++){
-                val += this->getEntry(riter,c) * other.getEntry(c,r);
+                val += this->getEntry(riter,c) * other.matrix[c][r];
             }
             newMatrix.setEntry(riter, r, val);
         }
     }
     return newMatrix;
-
 }
 
-Matrix Matrix::ref(void){
-    int pivotpos = 0;
-    int i, j = 0;
-
-    while (i < this->getRows()){
-        if (this->getEntry(i, j) == 0){
-            for (int x = i+1; x < this->getRows(); x++){
-                if (this->getEntry(x, j) != 0){
-                    float * temp = new float[this->getCols()];
-                    for (int y = 0; y < this->getCols(); y++){
-                        temp[y] = this->getEntry(x, y);
-                        this->setEntry(x,y, this->getEntry(i, y));
-                        this->setEntry(i, y, temp[y]);
-                    }
-                    delete [] temp;
-                    break;
-                }
-                if (x == this->getRows() - 1){
-                    i++;
-                    j++;
-                }
-            }
-        }
-        else {
-            float div = 1/this->getEntry(i ,j);
-            for (int y = j; y < this->getCols(); y++){
-                this->setEntry(i,y, this->getEntry(i , y)/div);
-            }
-            for (int x = i+1; x < this->getRows(); x++){
-                float div = 0 - this->getEntry(x, j);
-                for (int y = j; y < this->getCols(); y++){
-                    this->setEntry(x, y, this->getEntry(x,y) + div*this->getEntry(i,j));
-                }
-            }
-            i++;
-            j++;
-        }
-    }
-}
-
-bool Matrix::operator==(const Matrix & other){
-    if (this->getRows() != other.getRows() || this->getCols() != other.getCols()){
+bool Matrix::operator==(const Matrix &other) {
+    if (this->getRows() != other.rows || this->getCols() != other.cols) {
         return false;
     }
-    for (int r = 0; r <  this->getRows(); r++){
-        for (int c = 0; c < this->getCols(); c++){
-            if (this->getEntry(r,c) != other.getEntry(r,c)){
+    for (int r = 0; r < other.rows; r++) {
+        for (int c = 0; c < other.cols; c++) {
+            if (this->getEntry(r,c) != other.matrix[r][c]) {
                 return false;
             }
         }
@@ -221,14 +166,3 @@ bool Matrix::operator==(const Matrix & other){
     return true;
 }
 
-Matrix::~Matrix(void){
-    if (this->matrix == NULL){
-        return;
-    }
-    for (int r = 0; r < this->rows; r++){
-        delete [] this->matrix[r];
-        this->matrix[r] = NULL;
-    }
-    delete [] this->matrix;
-    this->matrix = NULL;
-}
