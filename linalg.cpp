@@ -151,10 +151,8 @@ void zero_test(void) {
 
 void identity_test(void) {
     printf("\nIdentity Matrix Test\n");
-    Matrix m1 = Matrix(3,3);
-    m1.setEntry(0,0,1);
-    m1.setEntry(1,1,1);
-    m1.setEntry(2,2,1);
+    Matrix m1 = Matrix();
+    m1 = m1.identity(3,3);
     m1.print();
     if (m1.isIdentity()) {
         printf("is identity matrix\n");
@@ -173,7 +171,6 @@ void identity_test(void) {
 }
 
 int main(int argc, char ** agrv){
-
     default_constructor_test();
     dim_constructor_test();
     copy_constructor_test();
