@@ -15,6 +15,7 @@ class Matrix {
         int getCols(void);
         void setEntry(const int &, const int &, float);
         float getEntry(const int &, const int &);
+        Matrix identity(const int &, const int &);
         std::vector<int> dims(void);
         void print(void);
         Matrix transpose(void);
@@ -33,8 +34,8 @@ Matrix::Matrix(void) {
 Matrix::Matrix(const int &x, const int &y) {
     this->rows = x;
     this->cols = y;
-    std::vector<float> rowSize = std::vector<float>(rows);
-    for (int i = 0; i < y; i++){
+    std::vector<float> rowSize = std::vector<float>(y);
+    for (int i = 0; i < x; i++){
         this->matrix.push_back(rowSize);
     }
 }
@@ -42,6 +43,12 @@ Matrix::Matrix(const int &x, const int &y) {
 Matrix::Matrix(const Matrix &other) {
     this->rows = other.rows;
     this->cols = other.cols;
+    *this = Matrix(this->rows, this->cols);
+    for (int x = 0; x < other.rows; x++) {
+        for (int y = 0; y < other.cols; y++) {
+            this->matrix[x][y] = other.matrix[x][y];
+        }
+    }
 }
 
 int Matrix::getRows() {
@@ -53,7 +60,7 @@ int Matrix::getCols() {
 }
 
 void Matrix::setEntry(const int &row, const int &col, float entry) {
-    if (row <= this->getRows() && col <= this->getCols()) {
+    if (row < this->getRows() && col < this->getCols()) {
         this->matrix[row][col] = entry;
     }
     else {
@@ -62,13 +69,25 @@ void Matrix::setEntry(const int &row, const int &col, float entry) {
 }
 
 float Matrix::getEntry(const int &row, const int &col) {
-    if (row <= this->getRows() && col <= this->getCols()) {
+    if (row < this->getRows() && col < this->getCols()) {
         return this->matrix[row][col];
     }
     else {
         printf("Out of bounds of this matrix\n");
         return 0.0;
     }
+}
+
+Matrix Matrix::identity(const int &x, const int &y) {
+    Matrix identity = Matrix(x,y);
+    for (int x = 0; x < identity.getRows(); x++) {
+        for (int y = 0; y < identity.getCols(); y++) {
+            if (x == y) {
+                identity.matrix[x][y] = 1;
+            }
+        }  
+    }
+    return identity;
 }
 
 std::vector<int> Matrix::dims() {
@@ -82,22 +101,20 @@ void Matrix::print(void) {
     printf("[");
     for (int x = 0; x < this->getRows(); x++) {
         for (int y = 0; y < this->getCols(); y++) {
-            printf("%5.2f ", this->getEntry(x,y));
+            printf("%10.5f ", this->getEntry(x,y));
         }
         if (x != this->getRows() - 1) { 
-            printf("\n");
+            printf("]\n[");
         }
     }
-    printf("]\n");
+    printf("]\n\n");
 }
 
 Matrix Matrix::transpose() {
-    const int & newRows = this->cols;
-    const int & newCols = this->rows;
-    Matrix newMatrix(newRows, newCols);
-    for (int r = 0; r < newRows; r++){
-        for (int c = 0; c < newCols; c++){
-            newMatrix.matrix[r][c] = this->matrix[c][r];
+    Matrix newMatrix(this->getCols(), this->getRows());
+    for (int r = 0; r < this->getRows(); r++){
+        for (int c = 0; c < this->getCols(); c++){
+            newMatrix.setEntry(c,r, this->matrix[r][c]);
         }
     }
     return newMatrix;
