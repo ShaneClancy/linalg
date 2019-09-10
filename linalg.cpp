@@ -9,22 +9,25 @@ void default_constructor_test(void){
 void dim_constructor_test(void){
     printf("\nr x c Matrix Constructor Test\n");
     Matrix m1(3, 4);
+    Matrix m2(4, 3);
     m1.print();
+    m2.print();
 }
 
 void copy_constructor_test(void){
     printf("\nCopy Constructor Test\n");
     Matrix m1(3,3);
-    Matrix m2(m1);
+    Matrix m2 = Matrix(m1);
     m1.print();
     m2.print();
 }
 
 void transpose_test(void){
     printf("\nTranspose Test\n");
-    Matrix m1(1,5);
-    Matrix m2 = m1.transpose();
+    Matrix m1(3,2);
     m1.print();
+    Matrix m2(2,3);
+    m2 = m1.transpose();
     m2.print();
 }
 
@@ -105,7 +108,8 @@ void dims_test(void){
     printf("(%d, %d)\n", dim[0], dim[1]);
 }
 
-void ref_test(void){
+void rref_test(void){
+    printf("\nRREF Test\n");
     Matrix m1 = Matrix(3,3);
     m1.setEntry(0,0, 1);
     m1.setEntry(0,1, 2);
@@ -118,7 +122,7 @@ void ref_test(void){
     m1.setEntry(2,2, 9);
     m1.print();
     Matrix m2 = m1.rref();
-    printf("ref version");
+    printf("rref version:\n");
     m2.print();
 
 }
@@ -134,5 +138,5 @@ int main(int argc, char ** agrv){
     subtraction_test();
     multiplication_test();
     dims_test();
-    ref_test();
+    rref_test();
 }
