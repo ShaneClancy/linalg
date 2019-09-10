@@ -24,6 +24,8 @@ class Matrix {
         Matrix multiply(const Matrix &);
         bool operator==(const Matrix &);
         Matrix rref();
+        bool isZero();
+        bool isIdentity();
 };
 
 Matrix::Matrix(void) {
@@ -219,3 +221,31 @@ Matrix Matrix::rref() {
     return *this;
 }
 
+bool Matrix::isZero() {
+    for (int x = 0; x < this->getRows(); x++) {
+        for (int y = 0; y < this->getCols(); y++) {
+            if (this->matrix[x][y] != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Matrix::isIdentity() {
+    for (int x = 0; x < this->getRows(); x++) {
+        for (int y = 0; y < this->getCols(); y++) {
+            if (x == y) {
+                if (this->matrix[x][y] != 1) {
+                    return false;
+                }
+            }
+            else {
+                if (this->matrix[x][y] != 0) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
