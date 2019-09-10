@@ -127,6 +127,51 @@ void rref_test(void){
 
 }
 
+void zero_test(void) {
+    printf("\nZero Matrix Test\n");
+    Matrix m1 = Matrix(3,3);
+    m1.print();
+    if(m1.isZero()) {
+        printf("is zero matrix\n");
+    }
+    else {
+        printf("is not zero matrix\n");
+    }
+    m1.setEntry(0,0,1);
+    m1.setEntry(1,1,1);
+    m1.setEntry(2,2,1);
+    m1.print();
+    if(m1.isZero()) {
+        printf("is zero matrix\n");
+    }
+    else {
+        printf("is not zero matrix\n");
+    }
+}
+
+void identity_test(void) {
+    printf("\nIdentity Matrix Test\n");
+    Matrix m1 = Matrix(3,3);
+    m1.setEntry(0,0,1);
+    m1.setEntry(1,1,1);
+    m1.setEntry(2,2,1);
+    m1.print();
+    if (m1.isIdentity()) {
+        printf("is identity matrix\n");
+    }
+    else {
+        printf("is not identity matrix\n");
+    }
+    m1.setEntry(1,1,0);
+    m1.print();
+        if (m1.isIdentity()) {
+        printf("is identity matrix\n");
+    }
+    else {
+        printf("is not identity matrix\n");
+    }
+}
+
 int main(int argc, char ** agrv){
 
     default_constructor_test();
@@ -139,4 +184,6 @@ int main(int argc, char ** agrv){
     multiplication_test();
     dims_test();
     rref_test();
+    zero_test();
+    identity_test();
 }
