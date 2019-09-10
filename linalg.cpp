@@ -96,15 +96,13 @@ void multiplication_test(void){
 
 void dims_test(void){
     Matrix m1 = Matrix(3,3);
-    int * dim = m1.dims();
+    std::vector<int> dim = m1.dims();
     printf("\nDimensions Test of 3x3\n");
     printf("(%d, %d)\n", dim[0], dim[1]);
-    delete [] dim;
     Matrix m2 = Matrix(1,5);
     dim = m2.dims();
     printf("\nDimensions Test of 1x5\n");
     printf("(%d, %d)\n", dim[0], dim[1]);
-    delete [] dim;
 }
 
 void ref_test(void){
@@ -119,7 +117,7 @@ void ref_test(void){
     m1.setEntry(2,1, 8);
     m1.setEntry(2,2, 9);
     m1.print();
-    Matrix m2 = m1.ref();
+    Matrix m2 = m1.rref();
     printf("ref version");
     m2.print();
 
