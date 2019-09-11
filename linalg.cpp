@@ -170,6 +170,25 @@ void identity_test(void) {
     }
 }
 
+void infnorm_test() {
+    printf("\nInifnity Norm Test\n");
+    Matrix m1 = Matrix();
+    m1 = m1.identity(3,3);
+    m1.print();
+    printf("has an infnity norm of %f\n", m1.infNorm());
+    m1.setEntry(0,0, 1);
+    m1.setEntry(0,1, 2);
+    m1.setEntry(0,2, 3);
+    m1.setEntry(1,0, 4);
+    m1.setEntry(1,1, 5);
+    m1.setEntry(1,2, 6);
+    m1.setEntry(2,0, 7);
+    m1.setEntry(2,1, 8);
+    m1.setEntry(2,2, 9);
+    m1.print();
+    printf("has an infinity norm of %f\n", m1.infNorm());
+}
+
 int main(int argc, char ** agrv){
     default_constructor_test();
     dim_constructor_test();
@@ -183,4 +202,5 @@ int main(int argc, char ** agrv){
     rref_test();
     zero_test();
     identity_test();
+    infnorm_test();
 }
