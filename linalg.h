@@ -26,6 +26,7 @@ class Matrix {
         Matrix rref();
         bool isZero();
         bool isIdentity();
+        float infNorm();
 };
 
 Matrix::Matrix(void) {
@@ -248,4 +249,23 @@ bool Matrix::isIdentity() {
         }
     }
     return true;
+}
+
+float Matrix::infNorm() {
+    std::vector<float> rowSums;
+    float indSum = 0;
+    for (int x = 0; x < this->getRows(); x++) {
+        indSum = 0;
+        for (int y = 0; y < this->getCols(); y++) {
+            indSum += this->matrix[x][y];
+        }
+        rowSums.push_back(indSum);
+    }
+    float max = 0;
+    for (float x : rowSums) {
+        if (x > max) {
+            max = x;
+        }
+    }
+    return max;
 }
