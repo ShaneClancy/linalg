@@ -189,6 +189,19 @@ void infnorm_test() {
     printf("has an infinity norm of %f\n", m1.infNorm());
 }
 
+void scale_test() {
+    printf("\nScaling Test\n");
+    Matrix m1 = Matrix();
+    m1 = m1.identity(3,3);
+    m1.print();
+    m1 = m1.scaleAll(3);
+    m1.print();
+    m1 = m1.scaleRow(0, 3);
+    m1.print();
+    m1 = m1.scaleCol(0, 3);
+    m1.print();
+}
+
 int main(int argc, char ** agrv){
     default_constructor_test();
     dim_constructor_test();
@@ -203,4 +216,5 @@ int main(int argc, char ** agrv){
     zero_test();
     identity_test();
     infnorm_test();
+    scale_test();
 }
