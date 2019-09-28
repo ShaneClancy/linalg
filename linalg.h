@@ -22,11 +22,14 @@ class Matrix {
         Matrix add(const Matrix &);
         Matrix subtract(const Matrix &);
         Matrix multiply(const Matrix &);
-        bool operator==(const Matrix &);
+        Matrix scaleAll(const float &);
+        Matrix scaleCol(const int &, const float &);
+        Matrix scaleRow(const int &, const float &);
         Matrix rref();
         bool isZero();
         bool isIdentity();
         float infNorm();
+        bool operator==(const Matrix &);
 };
 
 Matrix::Matrix(void) {
@@ -170,18 +173,35 @@ Matrix Matrix::multiply(const Matrix &other) {
     return newMatrix;
 }
 
-bool Matrix::operator==(const Matrix &other) {
-    if (this->getRows() != other.rows || this->getCols() != other.cols) {
-        return false;
+Matrix Matrix::scaleAll(const float &constant) {
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getCols(); j++) {
+            this->setEntry(i, j, this->getEntry(i, j) * constant);
+        }
     }
-    for (int r = 0; r < other.rows; r++) {
-        for (int c = 0; c < other.cols; c++) {
-            if (this->getEntry(r,c) != other.matrix[r][c]) {
-                return false;
+    return *this;
+}
+
+Matrix Matrix::scaleRow(const int &rowNumber, const float &constant) {
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getCols(); j++) {
+            if (i == rowNumber) {
+                this->setEntry(i, j, this->getEntry(i, j) * constant);
             }
         }
     }
-    return true;
+    return *this;
+}
+
+Matrix Matrix::scaleCol(const int &colNumber, const float &constant) {
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getCols(); j++) {
+            if (j == colNumber) {
+                this->setEntry(i, j, this->getEntry(i, j) * constant);
+            }
+        }
+    }
+    return *this;
 }
 
 Matrix Matrix::rref() {
@@ -268,4 +288,18 @@ float Matrix::infNorm() {
         }
     }
     return max;
+}
+
+bool Matrix::operator==(const Matrix &other) {
+    if (this->getRows() != other.rows || this->getCols() != other.cols) {
+        return false;
+    }
+    for (int r = 0; r < other.rows; r++) {
+        for (int c = 0; c < other.cols; c++) {
+            if (this->getEntry(r,c) != other.matrix[r][c]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
