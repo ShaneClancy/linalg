@@ -37,10 +37,19 @@ Here are a list of functionalities of this header file and how they are used:
  - multiply(Matrix)
     - multiplies two Matrices together, with the current Matrix being the left Matrix and the other Matrix being the right Matrix.
     - If the rows of left Matrix dont match the columns of the right Matrix, the first Matrix will be returned.
+ - scaleAll(float)
+    - scales each entry in a matrix by a constant.
+ - scaleRow(int, float)
+    - scales a row in a matrix by a constant.
+ - scaleCol(int, float)
+    - scales a col in a matrix by a constant.
+ - rref()
+    - Row reduces a matrix and returns it.
+ - isZero()
+    - test to see if a matrix of any size is a zero matrix.
+ - isIdentity()
+    - test to see if a matrix is an identity matrix.
+ - infNorm()
+    - calculates infinity norm of a matrix.
  - operator==(Matrix)
     - Compares two Matrices by each of their entries.
- - rref()
- - isZero()
- - isIdentity()
- - infNorm()
-
